@@ -1,0 +1,283 @@
+/*
+ Theme Name:  Divi Child Theme
+ Theme URI:    https://divilife.com
+ Description:  Child Theme for Divi
+ Author:       Tim Strifler
+ Author URI:   https://divilife.com
+ Template:     Divi
+ Version:      1.0.0
+*/
+
+/*****Add any custom CSS below this line*****/
+
+@font-face {
+    font-family: 'Gilroy-Regular';
+    src: url('Gilroy-Regular.woff');
+}
+
+@font-face {
+    font-family: 'Gilroy-Bold';
+    src: url('Gilroy-Bold.woff');
+}
+
+h1,h2,h3,h4,h5 {
+	font-family: 'Gilroy-Bold';
+}
+
+p,span,li {
+	font-family: 'Gilroy-Regular';
+	font-weight: 400;
+}
+
+.more-on p {
+	 font-family: 'Gilroy-Bold' !important;
+}
+
+.our-team-content{
+    display: flex;
+}
+
+.our-team-category-row{
+    display: flex;
+    margin: 0 -20px;
+}
+
+.team-category-col{
+    padding: 0 20px;
+}
+
+.team-category{
+    cursor: pointer;
+    border-bottom: 4px solid #ffffff;
+    color: #CACACA;
+}
+
+.team-category.active, .team-category:hover{
+    border-bottom-color:#00BE35;
+    color: #1A1A1A;
+
+}
+
+.team-card-row{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -9px;
+}
+
+.team-card-col{
+    width: 20%;
+    padding: 9px;
+}
+
+.team-card{
+    background-color: #F2F2F2;
+    border-radius: 10px;
+    padding: 22px;
+    height: 100%;
+}
+
+.team-avatar img{
+    border-radius: 10px;
+}
+
+.team-name{
+    font-weight: bold;
+    text-align: center;
+    color: #4F4F4F;
+}
+
+.team-role{
+    text-align: center;
+    color: #4F4F4F;
+}
+
+.portfolio-category-row{
+    display: flex;
+    margin: 0 -20px;
+}
+
+.portfolio-category-col{
+    padding: 0 20px;
+}
+
+.portfolio-category{
+    color: #CACACA;
+    border-bottom: 4px solid #fff;
+    cursor: pointer;
+}
+
+.portfolio-category:hover, .portfolio-category.active{
+    border-bottom-color: #00BE35;
+    color: #1A1A1A;
+}
+
+.portfolio-card-row{
+    display: flex;
+    margin: 0 -40px;
+    flex-wrap: wrap;
+}
+
+.portfolio-card-col{
+    width: 33.33333%;
+    padding: 0 40px;
+}
+
+.portfolio-card-col.hide{
+    display: none;
+}
+
+.portfolio-card{
+    cursor: pointer;
+}
+
+.portfolio-image{
+    height: 100px;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+}
+
+.portfolio-name{
+    font-weight: bold;
+}
+
+.popup-portfolio{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-portfolio-row{
+    position: relative;
+    width: 1200px;
+    padding: 100px 150px;
+    background-color: #3D4A5D;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+}
+
+.popup-portfolio-left{
+    width: 340px;
+}
+
+.popup-portfolio-image{
+    height: 340px;
+    background-color: #fff;
+}
+
+.popup-portfolio-right{
+    width: 460px;
+}
+
+.popup-portfolio-paginavigations{
+    display: flex;
+    color: #fff;
+    position: absolute;
+    top: 40px;
+    left: 70px;
+}
+
+.popup-portfolio-paginavigation--back{
+    cursor: pointer;
+}
+
+.popup-portfolio-paginavigations--next{
+    margin-left: 50px;
+    cursor: pointer;
+}
+
+.popup-portfolio-close{
+    position: absolute;
+    top: 40px;
+    right: 70px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.ajax-spinner{
+    background-color: #000;
+    background-image: url('./images/ajax-spin.gif');
+    background-position: center;
+    background-repeat: no-repeat;
+    bottom: 0;
+    left: 0;
+    opacity: 0.5;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 99999;
+}
+
+.ajax-spinner.hide{
+    display: none;
+}
+
+.popup-team{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-team-row{
+    position: relative;
+    width: 1200px;
+    padding: 100px 150px;
+    background-color: #3D4A5D;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+}
+
+.popup-team-left{
+    width: 340px;
+}
+
+.popup-team-image{
+    height: 340px;
+    background-color: #fff;
+}
+
+.popup-team-right{
+    width: 460px;
+}
+
+.popup-team-paginavigations{
+    display: flex;
+    color: #fff;
+    position: absolute;
+    top: 40px;
+    left: 70px;
+}
+
+.popup-team-paginavigation--back{
+    cursor: pointer;
+}
+
+.popup-team-paginavigations--next{
+    margin-left: 50px;
+    cursor: pointer;
+}
+
+.popup-team-close{
+    position: absolute;
+    top: 40px;
+    right: 70px;
+    color: #fff;
+    cursor: pointer;
+}

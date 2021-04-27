@@ -38,12 +38,6 @@ function diex_initialize_extension() {
 add_action( 'divi_extensions_init', 'diex_initialize_extension' );
 endif;
 
-function add_theme_scripts() {
-	wp_enqueue_style( 'my-divi-extension', plugin_dir_url( __FILE__ ) . 'styles/style.css');
-}
-
-add_action( 'wp_enqueue_scripts', 'add_theme_scripts' );
-
 add_action('wp_ajax_get_teams', 'getTeamsFunc');
 add_action('wp_ajax_nopriv_get_teams', 'getTeamsFunc');
 
