@@ -53,8 +53,16 @@ class DIEX_Porftolio extends ET_Builder_Module {
 
 			if ( $the_query->have_posts() ) {
 				global $post;
+
+				$postIdStr = '';
+
+				while ( $the_query->have_posts() ) {
+					$the_query->the_post();
+
+					$postIdStr .= $post->ID . ',';
+				}
 				
-				$output .= '<div class="portfolio-card-row" data-portfolio-nonce="' . wp_create_nonce('get_portfolio_nonce') .'">';
+				$output .= '<div class="portfolio-card-row" data-posts="' . $postIdStr . '" data-portfolio-nonce="' . wp_create_nonce('get_portfolio_nonce') .'">';
 				
 					while ( $the_query->have_posts() ) {
 						$the_query->the_post();

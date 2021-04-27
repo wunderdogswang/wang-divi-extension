@@ -181,43 +181,103 @@ images.forEach(image => {
 
 
 // our team & portfolio code
+function getPortfolioPopupContent(postId){
+	var nonce = jQuery('.portfolio-card-row').attr('data-portfolio-nonce');
+	var posts = jQuery('.portfolio-card-row').attr('data-posts');
+
+	jQuery('.ajax-spinner').removeClass('hide');
+	jQuery.ajax({
+		type: 'post',
+		dataType: 'json',
+		url: et_pb_custom.ajaxurl,
+		data: {
+			action: 'get_portfolio',
+			nonce: nonce,
+			postId: postId,
+			posts: posts
+		},
+		success: function (response) {
+			if( jQuery('.popup-portfolio').length === 0 ){
+				jQuery('body').append('<div class="popup-portfolio"></div>')
+
+				jQuery('.popup-portfolio').click(function(){
+					jQuery('.popup-portfolio').remove();
+				})
+			}
+
+			jQuery('.popup-portfolio').html(response.html);
+
+			jQuery('.popup-portfolio-row').click(function(event){
+				event.stopPropagation();
+			})
+
+			jQuery('.popup-portfolio-close').click(function(){
+				jQuery('.popup-portfolio').remove();
+			})
+
+			jQuery('.popup-team-paginavigation--back, .popup-team-paginavigations--next').click(function(){
+				var postId = jQuery(this).attr('data-post-id');
+
+				jQuery('.popup-portfolio').remove();
+				getPortfolioPopupContent(postId);
+			});
+
+			jQuery('.ajax-spinner').addClass('hide');
+		}
+	});
+}
+
+function getTeamPopupContent(postId){
+	var nonce = jQuery('.team-card-row-wrapper').attr('data-team-nonce');
+	var posts = jQuery('.team-card-row').attr('data-posts');
+
+	jQuery('.ajax-spinner').removeClass('hide');
+	jQuery.ajax({
+		type: 'post',
+		dataType: 'json',
+		url: et_pb_custom.ajaxurl,
+		data: {
+			action: 'get_team',
+			nonce: nonce,
+			postId: postId,
+			posts: posts,
+		},
+		success: function (response) {
+			if( jQuery('.popup-team').length === 0 ){
+				jQuery('body').append('<div class="popup-team"></div>')
+
+				jQuery('.popup-team').click(function(){
+					jQuery('.popup-team').remove();
+				})
+			}
+
+			jQuery('.popup-team').html(response.html);
+
+			jQuery('.popup-team-row').click(function(event){
+				event.stopPropagation();
+			})
+
+			jQuery('.popup-team-close').click(function(){
+				jQuery('.popup-team').remove();
+			})
+
+			jQuery('.popup-team-paginavigation--back, .popup-team-paginavigations--next').click(function(){
+				var postId = jQuery(this).attr('data-post-id');
+
+				jQuery('.popup-team').remove();
+				getTeamPopupContent(postId);
+			});
+
+			jQuery('.ajax-spinner').addClass('hide');
+		}
+	});
+}
+
 function addTeamCardClickEvent(){
 	jQuery('.team-card').click(function(){
 		var postId = jQuery(this).attr('data-post-id');
-		var nonce = jQuery('.team-card-row').attr('data-team-nonce');
 
-		jQuery('.ajax-spinner').removeClass('hide');
-		jQuery.ajax({
-			type: 'post',
-			dataType: 'json',
-			url: et_pb_custom.ajaxurl,
-			data: {
-				action: 'get_team',
-				nonce: nonce,
-				postId: postId
-			},
-			success: function (response) {
-				if( jQuery('.popup-team').length === 0 ){
-					jQuery('body').append('<div class="popup-team"></div>')
-
-					jQuery('.popup-team').click(function(){
-						jQuery('.popup-team').remove();
-					})
-				}
-
-				jQuery('.popup-team').html(response.html);
-
-				jQuery('.popup-team-row').click(function(event){
-					event.stopPropagation();
-				})
-
-				jQuery('.popup-team-close').click(function(){
-					jQuery('.popup-team').remove();
-				})
-
-				jQuery('.ajax-spinner').addClass('hide');
-			}
-		});
+		getTeamPopupContent(postId);
 	})
 }
 
@@ -238,7 +298,7 @@ function teamCategorySortFunc(termId, sortType){
 			sortType: sortType
 		},
 		success: function (response) {
-			jQuery('.team-card-row').html(response.html);
+			jQuery('.team-card-row-wrapper').html(response.html);
 			addTeamCardClickEvent();
 			jQuery('.ajax-spinner').addClass('hide');
 		}
@@ -257,8 +317,8 @@ jQuery(document).ready(function(){
 		teamCategorySortFunc(termId, '');
 	})
 
-	jQuery('.our-team-sort').click(function(){
-		var sortType = jQuery(this).attr('data-sort');
+	jQuery('.our-team-sort').change(function(){
+		var sortType = jQuery(this).val();
 		var termId = jQuery('.our-team-category-row').attr('data-term-id');
 
 		teamCategorySortFunc(termId, sortType);
@@ -276,43 +336,20 @@ jQuery(document).ready(function(){
 			jQuery('.portfolio-card-col').addClass('hide');
 			jQuery('.portfolio-card-col-term-' + termId).removeClass('hide');
 		}
+
+		var postIdStr = '';
+
+		jQuery('.portfolio-card-col').not('.hide').each(function(i, elem){
+			var postId = jQuery('.portfolio-card', elem).attr('data-post-id');
+			postIdStr += postId + ',';
+		})
+
+		jQuery('.portfolio-card-row').attr('data-posts', postIdStr);
 	})
 
 	jQuery('.portfolio-card').click(function(){
 		var postId = jQuery(this).attr('data-post-id');
-		var nonce = jQuery('.portfolio-card-row').attr('data-portfolio-nonce');
-
-		jQuery('.ajax-spinner').removeClass('hide');
-		jQuery.ajax({
-			type: 'post',
-			dataType: 'json',
-			url: et_pb_custom.ajaxurl,
-			data: {
-				action: 'get_portfolio',
-				nonce: nonce,
-				postId: postId
-			},
-			success: function (response) {
-				if( jQuery('.popup-portfolio').length === 0 ){
-					jQuery('body').append('<div class="popup-portfolio"></div>')
-
-					jQuery('.popup-portfolio').click(function(){
-						jQuery('.popup-portfolio').remove();
-					})
-				}
-
-				jQuery('.popup-portfolio').html(response.html);
-
-				jQuery('.popup-portfolio-row').click(function(event){
-					event.stopPropagation();
-				})
-
-				jQuery('.popup-portfolio-close').click(function(){
-					jQuery('.popup-portfolio').remove();
-				})
-
-				jQuery('.ajax-spinner').addClass('hide');
-			}
-		});
+		
+		getPortfolioPopupContent(postId);
 	})
 });

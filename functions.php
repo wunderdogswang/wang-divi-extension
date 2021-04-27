@@ -280,6 +280,22 @@ function getPortfolioFunc()
     $postId = intval($_REQUEST['postId']);
     $portfolio = get_post($postId);
 
+    $posts = explode(',', $_REQUEST['posts']);
+    $index = array_search($postId, $posts);
+
+    $backPostId = $posts[$index - 1];
+    $nextPostId = $posts[$index + 1];
+
+    $navHtml = "";
+
+    if( !empty($backPostId) ){
+        $navHtml .= "<div class=\"popup-team-paginavigation--back\" data-post-id=\"{$backPostId}\">Back</div>";
+    }
+
+    if( !empty($nextPostId) ){
+        $navHtml .= "<div class=\"popup-team-paginavigations--next\" data-post-id=\"{$nextPostId}\">Next</div>";
+    }
+
     $Headquarters = get_field('headquarters', $postId);
     $year_of_investment = get_field('year_of_investment', $postId);
     $description = get_field('description', $postId);
@@ -289,10 +305,7 @@ function getPortfolioFunc()
     $result = [];
     $result['html'] = "
         <div class=\"popup-portfolio-row\">
-            <div class=\"popup-portfolio-paginavigations\">
-                <div class=\"popup-portfolio-paginavigation--back\">Back</div>
-                <div class=\"popup-portfolio-paginavigations--next\">Next</div>
-            </div>
+            <div class=\"popup-portfolio-paginavigations\">{$navHtml}</div>
             <div class=\"popup-portfolio-close\">Close</div>
             <div class=\"popup-portfolio-left\">
                 <div class=\"popup-portfolio-image\"></div>
@@ -349,12 +362,12 @@ function getTeamListFunc()
         ]
     ];
 
-    if( $sortType === 'name' ){
-        $args['orderby'] = 'title';
-        $args['order'] = 'ASC';
-    } else if( $sortType === 'position' ){
+    if( $sortType === 'position' ){
         $args['orderby'] = 'meta_value_num';
         $args['meta_key'] = 'position_ranking';
+        $args['order'] = 'ASC';
+    } else {
+        $args['orderby'] = 'title';
         $args['order'] = 'ASC';
     }
 
@@ -365,7 +378,15 @@ function getTeamListFunc()
     if ( $the_query->have_posts() ) {
         global $post;
         
-        $output .= '<div class="team-card-row">';
+        $postIdStr = '';
+
+        while ( $the_query->have_posts() ) {
+            $the_query->the_post();
+
+            $postIdStr .= $post->ID . ',';
+        }
+
+        $output .= '<div class="team-card-row" data-posts="' . $postIdStr . '">';
         
             while ( $the_query->have_posts() ) {
                 $the_query->the_post();
@@ -405,22 +426,37 @@ function getTeamFunc()
     }
 
     $postId = intval($_REQUEST['postId']);
+    
+    $posts = explode(',', $_REQUEST['posts']);
+    $index = array_search($postId, $posts);
+
     $team = get_post($postId);
+
+    $backPostId = $posts[$index - 1];
+    $nextPostId = $posts[$index + 1];
+
+    $navHtml = "";
+
+    if( !empty($backPostId) ){
+        $navHtml .= "<div class=\"popup-team-paginavigation--back\" data-post-id=\"{$backPostId}\">Back</div>";
+    }
+
+    if( !empty($nextPostId) ){
+        $navHtml .= "<div class=\"popup-team-paginavigations--next\" data-post-id=\"{$nextPostId}\">Next</div>";
+    }
 
     $my_energy = get_field('my_energy', $postId);
     $role = get_field('role', $postId);
     $bio = get_field('bio', $postId);
+    $avatar = get_field('avatar', $postId);
 
     $result = [];
     $result['html'] = "
         <div class=\"popup-team-row\">
-            <div class=\"popup-team-paginavigations\">
-                <div class=\"popup-team-paginavigation--back\">Back</div>
-                <div class=\"popup-team-paginavigations--next\">Next</div>
-            </div>
+            <div class=\"popup-team-paginavigations\">{$navHtml}</div>
             <div class=\"popup-team-close\">Close</div>
             <div class=\"popup-team-left\">
-                <div class=\"popup-team-image\"></div>
+                <div class=\"popup-team-image\"><img src=\"{$avatar}\" /></div>
                 <div class=\"popup-team-energy\">
                     <h3>MY ENERGY COMES FROM:</h3>
                     <p>{$my_energy}</p>

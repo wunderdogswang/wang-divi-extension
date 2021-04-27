@@ -44,8 +44,10 @@ class DIEX_OurTeam extends ET_Builder_Module {
 				}
 			$output .= '</div>';
 
-			$output .= '<div class="our-team-sort" data-sort="name">Sort By Name</div>';
-			$output .= '<div class="our-team-sort" data-sort="position">Sort By Position</div>';
+			$output .= '<select class="our-team-sort">';
+				$output .= '<option value="name">Sort By Name</option>';
+				$output .= '<option value="position">Sort By Position</option>';
+			$output .= '</select>';
 
 			// get posts
 			$args = [
@@ -58,7 +60,9 @@ class DIEX_OurTeam extends ET_Builder_Module {
 						'field'    => 'term_id',
 						'terms'    => $categories[0]->term_id,
 					]
-				]
+					],
+					'orderby' => 'title',
+					'order' => 'ASC'
 			];
 
 			$the_query = new WP_Query( $args );
@@ -66,20 +70,30 @@ class DIEX_OurTeam extends ET_Builder_Module {
 			if ( $the_query->have_posts() ) {
 				global $post;
 				
-				$output .= '<div class="team-card-row" data-team-nonce="' . wp_create_nonce('get_team_nonce') .'">';
-				
-					while ( $the_query->have_posts() ) {
-						$the_query->the_post();
+				$postIdStr = '';
 
-						$output .= '<div class="team-card-col">';
-							$output .= '<div class="team-card" data-post-id="' . $post->ID . '">';
-								$output .= '<div class="team-avatar"><img src="' . get_field('avatar', $post->ID) . '" /></div>';
-								$output .= '<div class="team-name">' . $post->post_title . '</div>';
-								$output .= '<div class="team-role">' . get_field('role', $post->ID) . '</div>';
+				while ( $the_query->have_posts() ) {
+					$the_query->the_post();
+
+					$postIdStr .= $post->ID . ',';
+				}
+
+				$output .= '<div class="team-card-row-wrapper" data-team-nonce="' . wp_create_nonce('get_team_nonce') .'">';
+					$output .= '<div class="team-card-row" data-posts="' . $postIdStr . '">';
+				
+						while ( $the_query->have_posts() ) {
+							$the_query->the_post();
+
+							$output .= '<div class="team-card-col">';
+								$output .= '<div class="team-card" data-post-id="' . $post->ID . '">';
+									$output .= '<div class="team-avatar"><img src="' . get_field('avatar', $post->ID) . '" /></div>';
+									$output .= '<div class="team-name">' . $post->post_title . '</div>';
+									$output .= '<div class="team-role">' . get_field('role', $post->ID) . '</div>';
+								$output .= '</div>';
 							$output .= '</div>';
-						$output .= '</div>';
-					}
+						}
 					
+					$output .= '</div>';
 				$output .= '</div>';
 			}
 			
